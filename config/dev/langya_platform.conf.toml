@@ -1,0 +1,22 @@
+name = "langya_platform"
+
+[db]
+    dsn = "localhost"
+    active = 50
+    idle = 25
+
+[redis]
+    addr = ""
+    password = ""
+    db = 0
+    maxRetries = 64
+    poolSize=10
+    minIdleConns=5
+    dialTimeout = 300
+    readTimeout = 500
+    writeTimeout = 500
+
+[log]
+    level=-1
+    development=true
+    outputPaths=["stderr", "./log/app-api.log"]
