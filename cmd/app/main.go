@@ -50,11 +50,11 @@ func readConfigFile(cfgName string) error {
 
 func signalInit() {
 	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM) // signal包将输入信号转发到ch,如果没有列出要传递的信号，会将所有输入信号传递到c；否则只传递列出的输入信号
 	for sig := range ch {
 		switch sig {
 		case syscall.SIGTERM, syscall.SIGINT:
-			log.Println("step 5: server exit success by SIGTERM/SIGINT/SIGUSR1")
+			log.Println("step 5: server exit success by SIGTERM/SIGINT")
 			os.Exit(0)
 		default:
 			log.Println("step 5: unknown signal", sig)
