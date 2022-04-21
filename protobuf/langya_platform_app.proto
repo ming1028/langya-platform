@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package langya.platform.app;
+option go_package = "langya_platform/langya/platform";  // 声明生成的 go 文件所属的包
+
+import "langya_platform_common.proto";
+
+message Person {
+  int64 id = 1;
+  string name = 2;
+  common.GenderType gender = 3;
+  string number = 4;
+}
+
+message ContractBook {
+  repeated Person persons = 1;
+}
