@@ -3,6 +3,7 @@
 protoc -I ./protobuf \
        --go_out ../../ \
        --go-grpc_out ../../ \
+       --grpc-gateway_out ../../ \
        ./protobuf/langya_platform_app.proto #proto文件
 
 protoc -I ./protobuf \

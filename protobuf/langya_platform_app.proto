@@ -4,6 +4,7 @@ package app;
 option go_package = "gitee.com/langya_platform/langya/platform/app";  // 声明生成的 go 文件所属的包
 
 import "langya_platform_common.proto";
+import "google/api/annotations.proto";
 
 message Person {
   int64 id = 1;
@@ -17,10 +18,13 @@ message ContractBook {
 }
 
 message ContractBookReq {
-
 }
 
 // rpc service
 service LangYaPlatform {
-  rpc ServiceContractBook(ContractBookReq) returns (ContractBook) {}
+  rpc ServiceContractBook(ContractBookReq) returns (ContractBook) {
+    option (google.api.http) = {
+      get: "/contract/book"
+    };
+  }
 }
