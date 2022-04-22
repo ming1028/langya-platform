@@ -15,3 +15,12 @@ message Person {
 message ContractBook {
   repeated Person persons = 1;
 }
+
+message ContractBookReq {
+
+}
+
+// rpc service
+service LangYaPlatform {
+  rpc ServiceContractBook(ContractBookReq) returns (ContractBook) {}
+}
