@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-package langya.platform.app;
-option go_package = "langya_platform/langya/platform";  // 声明生成的 go 文件所属的包
+package app;
+option go_package = "gitee.com/langya_platform/langya/platform/app";  // 声明生成的 go 文件所属的包
 
 import "langya_platform_common.proto";
 

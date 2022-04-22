@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-package langya.platform.common;
-option go_package = "langya_platform/langya/platform";  // 声明生成的 go 文件所属的包
+package common;
+option go_package = "gitee.com/langya_platform/langya/platform/common";  // 声明生成的 go 文件所属的包
 
 // 枚举类型第一个字段必须为0
 enum GenderType {
