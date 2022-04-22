@@ -27,4 +27,10 @@ service LangYaPlatform {
       get: "/contract/book"
     };
   }
+  rpc ServiceContractBookSave(ContractBookReq) returns (ContractBook) {
+    option (google.api.http) = {
+      post: "/contract/book"
+      body: "*"
+    };
+  }
 }
