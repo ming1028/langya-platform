@@ -1,12 +1,19 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	app2 "gitee.com/langya_platform/langya/platform/app"
 	"gitee.com/langya_platform/pkg/xzap"
+	"gitee.com/langya_platform/service/app"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"strings"
@@ -20,7 +27,37 @@ var (
 
 func main() {
 	envInit()
+	go startAppServ()
 	signalInit()
+}
+
+func startAppServ() {
+	// grpc服务
+	err := app.NewPlatformAppService(context.Background())
+	if err != nil {
+		panic(any("failed to init PlatformAppService"))
+	}
+
+	// http服务
+	conn, err := grpc.Dial(
+		"localhost:9901",
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+	)
+	if err != nil {
+		log.Fatalln("Failed to dial server:", err)
+	}
+	lamux := runtime.NewServeMux()
+	// Register Greeter
+	err = app2.RegisterLangYaPlatformHandler(context.Background(), lamux, conn)
+	if err != nil {
+		log.Fatalln("Failed to register gateway:", err)
+	}
+	lpAppServer := &http.Server{
+		Addr:    fmt.Sprintf(":%d", 9900),
+		Handler: lamux,
+	}
+	log.Println("Serving gRPC-Gateway on http://0.0.0.0" + fmt.Sprintf(":%d", 9900))
+	log.Fatalln(lpAppServer.ListenAndServe())
 }
 
 func envInit() {
