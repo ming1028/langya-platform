@@ -40,14 +40,14 @@ func startAppServ() {
 
 	// http服务
 	conn, err := grpc.Dial(
-		"localhost:9901",
+		"localhost"+fmt.Sprintf(":%d", viper.GetInt32("grpc.port")),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
 		log.Fatalln("Failed to dial server:", err)
 	}
 	lamux := runtime.NewServeMux()
-	// Register Greeter
+	// Register
 	err = app2.RegisterLangYaPlatformHandler(context.Background(), lamux, conn)
 	if err != nil {
 		log.Fatalln("Failed to register gateway:", err)
