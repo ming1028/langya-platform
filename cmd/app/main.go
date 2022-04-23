@@ -38,7 +38,7 @@ func startAppServ() {
 		panic(any("failed to init PlatformAppService"))
 	}
 
-	// http服务
+	// 连接到grpc服务
 	conn, err := grpc.Dial(
 		"localhost"+fmt.Sprintf(":%d", viper.GetInt32("grpc.port")),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
@@ -52,11 +52,12 @@ func startAppServ() {
 	if err != nil {
 		log.Fatalln("Failed to register gateway:", err)
 	}
+	// http服务
 	lpAppServer := &http.Server{
 		Addr:    fmt.Sprintf(":%d", 9900),
 		Handler: lamux,
 	}
-	log.Println("Serving gRPC-Gateway on http://0.0.0.0" + fmt.Sprintf(":%d", 9900))
+	xzap.Info("Serving gRPC-Gateway on http://0.0.0.0" + fmt.Sprintf(":%d", 9900))
 	log.Fatalln(lpAppServer.ListenAndServe())
 }
 
