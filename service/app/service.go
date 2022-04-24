@@ -15,6 +15,7 @@ func (*LangyaPlatformService) ServiceContractBook(
 ) (
 	*app.ContractBook, error,
 ) {
+	panic(any("出错了"))
 	return &app.ContractBook{
 		Persons: []*app.Person{
 			&app.Person{

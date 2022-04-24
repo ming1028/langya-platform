@@ -5,3 +5,10 @@
 {"level":"info","ts":"2022-04-23 14:12:16.369993","caller":"app/init.go:25","msg":"Serving gRPC on 0.0.0.0:9901"}
 {"level":"info","ts":"2022-04-23 14:53:33.944163","caller":"app/main.go:79","msg":"日志log","name":"申明辉"}
 {"level":"info","ts":"2022-04-23 14:53:33.946338","caller":"app/init.go:25","msg":"Serving gRPC on 0.0.0.0:9901"}
+{"level":"info","ts":"2022-04-23 20:22:04.323142","caller":"app/main.go:84","msg":"日志log","name":"申明辉"}
+{"level":"info","ts":"2022-04-23 20:22:04.323691","caller":"app/init.go:27","msg":"Serving gRPC on 0.0.0.0:9901"}
+{"level":"info","ts":"2022-04-23 20:22:04.324647","caller":"app/main.go:64","msg":"Serving gRPC-Gateway on http://0.0.0.0:9900"}
+{"level":"info","ts":"2022-04-24 09:43:58.849660","caller":"app/init.go:33","msg":"Serving gRPC on 0.0.0.0:9901"}
+{"level":"info","ts":"2022-04-24 09:43:58.850223","caller":"app/main.go:63","msg":"Serving gRPC-Gateway on http://0.0.0.0:9900"}
+{"level":"info","ts":"2022-04-24 09:52:14.127450","caller":"app/init.go:33","msg":"Serving gRPC on 0.0.0.0:9901"}
+{"level":"info","ts":"2022-04-24 09:52:14.128530","caller":"app/main.go:63","msg":"Serving gRPC-Gateway on http://0.0.0.0:9900"}

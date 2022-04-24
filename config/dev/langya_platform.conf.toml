@@ -19,7 +19,7 @@ name = "langya_platform"
 [log]
     level=-1
     development=true
-    outputPaths=["stderr", "./log/app-api.log"]
+    outputPaths=["./log/app-api.log"]
 
 [grpc]
     port = 9901

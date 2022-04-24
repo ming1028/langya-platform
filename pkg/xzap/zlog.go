@@ -177,3 +177,8 @@ func getLogField(ctx context.Context) (field zap.Field) {
 	field = zap.String("X-Request-Id", log_id)
 	return
 }
+
+func ErrorContext(ctx context.Context, msg string, fields ...zap.Field) {
+	fields = append(fields, getLogField(ctx))
+	zl.log.Error(msg, fields...)
+}

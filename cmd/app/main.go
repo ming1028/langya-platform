@@ -8,7 +8,6 @@ import (
 	"gitee.com/langya_platform/service/app"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -18,6 +17,7 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 )
 
 var (
@@ -48,7 +48,10 @@ func startAppServ() {
 	}
 	lamux := runtime.NewServeMux()
 	// Register
-	err = app2.RegisterLangYaPlatformHandler(context.Background(), lamux, conn)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	err = app2.RegisterLangYaPlatformHandler(ctx, lamux, conn)
 	if err != nil {
 		log.Fatalln("Failed to register gateway:", err)
 	}
@@ -77,7 +80,6 @@ func envInit() {
 	if err != nil {
 		panic(any(err))
 	}
-	xzap.Info("日志log", zap.Any("name", "申明辉"))
 }
 
 func readConfigFile(cfgName string) error {
