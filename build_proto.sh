@@ -4,6 +4,7 @@ protoc -I ./protobuf \
        --go_out ../../ \
        --go-grpc_out ../../ \
        --grpc-gateway_out ../../ \
+       --openapiv2_out ./views/swagger/ \
        ./protobuf/langya_platform_app.proto #proto文件
 
 protoc -I ./protobuf \

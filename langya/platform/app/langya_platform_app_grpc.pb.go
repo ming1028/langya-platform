@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LangYaPlatformClient interface {
 	ServiceContractBook(ctx context.Context, in *ContractBookReq, opts ...grpc.CallOption) (*ContractBook, error)
+	ServiceContractBookSave(ctx context.Context, in *ContractBookReq, opts ...grpc.CallOption) (*ContractBook, error)
 }
 
 type langYaPlatformClient struct {
@@ -42,11 +43,21 @@ func (c *langYaPlatformClient) ServiceContractBook(ctx context.Context, in *Cont
 	return out, nil
 }
 
+func (c *langYaPlatformClient) ServiceContractBookSave(ctx context.Context, in *ContractBookReq, opts ...grpc.CallOption) (*ContractBook, error) {
+	out := new(ContractBook)
+	err := c.cc.Invoke(ctx, "/app.LangYaPlatform/ServiceContractBookSave", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LangYaPlatformServer is the server API for LangYaPlatform service.
 // All implementations must embed UnimplementedLangYaPlatformServer
 // for forward compatibility
 type LangYaPlatformServer interface {
 	ServiceContractBook(context.Context, *ContractBookReq) (*ContractBook, error)
+	ServiceContractBookSave(context.Context, *ContractBookReq) (*ContractBook, error)
 	mustEmbedUnimplementedLangYaPlatformServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedLangYaPlatformServer struct {
 
 func (UnimplementedLangYaPlatformServer) ServiceContractBook(context.Context, *ContractBookReq) (*ContractBook, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ServiceContractBook not implemented")
+}
+func (UnimplementedLangYaPlatformServer) ServiceContractBookSave(context.Context, *ContractBookReq) (*ContractBook, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ServiceContractBookSave not implemented")
 }
 func (UnimplementedLangYaPlatformServer) mustEmbedUnimplementedLangYaPlatformServer() {}
 
@@ -88,6 +102,24 @@ func _LangYaPlatform_ServiceContractBook_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LangYaPlatform_ServiceContractBookSave_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ContractBookReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LangYaPlatformServer).ServiceContractBookSave(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/app.LangYaPlatform/ServiceContractBookSave",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LangYaPlatformServer).ServiceContractBookSave(ctx, req.(*ContractBookReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LangYaPlatform_ServiceDesc is the grpc.ServiceDesc for LangYaPlatform service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var LangYaPlatform_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ServiceContractBook",
 			Handler:    _LangYaPlatform_ServiceContractBook_Handler,
+		},
+		{
+			MethodName: "ServiceContractBookSave",
+			Handler:    _LangYaPlatform_ServiceContractBookSave_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

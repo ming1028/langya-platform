@@ -5,20 +5,25 @@ option go_package = "gitee.com/langya_platform/langya/platform/app";  // 声明�
 
 import "langya_platform_common.proto";
 import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
 
-message Person {
-  int64 id = 1;
-  string name = 2;
-  common.GenderType gender = 3;
-  string number = 4;
-}
-
-message ContractBook {
-  repeated Person persons = 1;
-}
-
-message ContractBookReq {
-}
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+    info: {
+      title: "Lang Ya Platform app Api Doc";
+      version: "1.0";
+      description: "琅琊内容平台app端 Api 文档";
+      contact: {
+        name: "minghui.shen";
+        url: "https://github.com/ming1028/langya-platform.git";
+        email: "minghui.shen@huashengfe.com";
+      };
+    };
+  base_path: "/swagger/";
+  schemes: HTTPS;
+  schemes: HTTP;
+  consumes: "application/json";
+  produces: "application/json";
+};
 
 // rpc service
 service LangYaPlatform {
@@ -33,4 +38,18 @@ service LangYaPlatform {
       body: "*"
     };
   }
+}
+
+message Person {
+  int64 id = 1;
+  string name = 2;
+  common.GenderType gender = 3;
+  string number = 4;
+}
+
+message ContractBook {
+  repeated Person persons = 1;
+}
+
+message ContractBookReq {
 }
