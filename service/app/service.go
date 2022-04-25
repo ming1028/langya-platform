@@ -4,6 +4,8 @@ import (
 	"context"
 	"gitee.com/langya_platform/langya/platform/app"
 	"gitee.com/langya_platform/langya/platform/common"
+	"gitee.com/langya_platform/pkg/xzap"
+	"go.uber.org/zap"
 )
 
 type LangyaPlatformService struct {
@@ -15,6 +17,7 @@ func (*LangyaPlatformService) ServiceContractBook(
 ) (
 	*app.ContractBook, error,
 ) {
+	xzap.Info("contractBook", zap.Any("book", 123))
 	panic(any("出错了"))
 	return &app.ContractBook{
 		Persons: []*app.Person{

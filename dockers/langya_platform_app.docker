@@ -1,0 +1,8 @@
+FROM ubuntu:18.04
+
+ENV GOPATH=/go
+
+RUN mkdir mkdir -p /go/src/langya_platform/config
+COPY config /go/src/langya_platform/config
+COPY main /go/src/langya_platform
+CMD ["/go/src/langya_platform/main"]

@@ -39,9 +39,11 @@ func startAppServ() {
 	}
 
 	// 连接到grpc服务
+	diaOpt := grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(20*1024*1024), grpc.MaxCallSendMsgSize(20*1024*1024))
 	conn, err := grpc.Dial(
 		"localhost"+fmt.Sprintf(":%d", viper.GetInt32("grpc.port")),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		diaOpt,
 	)
 	if err != nil {
 		log.Fatalln("Failed to dial server:", err)

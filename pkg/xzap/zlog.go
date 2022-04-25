@@ -2,6 +2,7 @@ package xzap
 
 import (
 	"context"
+	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"
@@ -17,6 +18,9 @@ type zLog struct {
 	errorOutPaths          []string
 	closeErrorOutPathsFunc func()
 	level                  zapcore.Level
+	sugarLogger            *zap.SugaredLogger
+	logOutputPath          string
+	errorLogOutputPath     string
 }
 
 var zl *zLog
@@ -28,6 +32,8 @@ func InitZLog(
 		return
 	}
 	errorOutPaths := []string{}
+	logOutputPath := ""
+	errLogOutPath := ""
 	for k, v := range outputPaths {
 		if v == "stderr" || v == "stdin" || v == "stdout" {
 			continue
@@ -38,19 +44,25 @@ func InitZLog(
 
 		outputPaths[k] = v
 		errorOutPaths = append(errorOutPaths, v+".error")
+		logOutputPath = v
+		errLogOutPath = v + ".error"
 	}
 
 	zl = &zLog{
-		outputPaths:   outputPaths,
-		errorOutPaths: errorOutPaths,
-		level:         level,
+		outputPaths:        outputPaths,
+		errorOutPaths:      errorOutPaths,
+		level:              level,
+		logOutputPath:      logOutputPath,
+		errorLogOutputPath: errLogOutPath,
 	}
 	err = zl.init()
 	if err != nil {
 		return
 	}
 	log.Println("new zlog", outputPaths, errorOutPaths)
-	zl.splitByTime()
+	// zl.splitByTime()
+
+	zl.InitZapLog()
 	return
 }
 
@@ -161,7 +173,8 @@ func (this *zLog) splitByTime() {
 }
 
 func Info(msg string, fields ...zap.Field) {
-	zl.log.Info(msg, fields...)
+	// zl.log.Info(msg, fields...)
+	zl.sugarLogger.Info(msg, fields)
 }
 
 func InfoContext(ctx context.Context, msg string, fields ...zap.Field) {
@@ -181,4 +194,30 @@ func getLogField(ctx context.Context) (field zap.Field) {
 func ErrorContext(ctx context.Context, msg string, fields ...zap.Field) {
 	fields = append(fields, getLogField(ctx))
 	zl.log.Error(msg, fields...)
+}
+
+func (this *zLog) InitZapLog() {
+	writeSyncer := getLogWriter(this.logOutputPath)
+	encoder := getEncoder()
+	core := zapcore.NewCore(encoder, writeSyncer, zapcore.DebugLevel)
+	logger := zap.New(core, zap.AddCaller())
+	zl.sugarLogger = logger.Sugar()
+}
+
+func getLogWriter(fileName string) zapcore.WriteSyncer {
+	lumberJackLogger := &lumberjack.Logger{
+		Filename:   fileName,
+		MaxSize:    1,     //切割文件大小 （MB）
+		MaxBackups: 5,     // 文件最大个数
+		MaxAge:     30,    // 保留最长时间 (天)
+		Compress:   false, // 压缩
+	}
+	return zapcore.AddSync(lumberJackLogger)
+}
+
+func getEncoder() zapcore.Encoder {
+	encoderConfig := zap.NewProductionEncoderConfig()
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+	return zapcore.NewConsoleEncoder(encoderConfig)
 }

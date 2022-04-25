@@ -15,7 +15,10 @@ import (
 
 // NewPlatformAppService 注册grpc服务
 func NewPlatformAppService(ctx context.Context) error {
+	// 接受的消息最大为4M
 	server := grpc.NewServer(
+		grpc.MaxRecvMsgSize(20*1024*1024),
+		grpc.MaxSendMsgSize(20*1024*1024),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_recovery.UnaryServerInterceptor(),
 		)),
